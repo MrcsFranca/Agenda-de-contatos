@@ -71,7 +71,7 @@ class _ContactPageState extends State<ContactPage> {
                         _editContact?.img != null &&
                             _editContact!.img!.isNotEmpty
                         ? FileImage(File(_editContact!.img!))
-                        : AssetImage("assets/imgs/avata.png") as ImageProvider,
+                        : AssetImage("assets/imgs/avatar.png") as ImageProvider,
                     fit: BoxFit.cover,
                   ),
                 ),
