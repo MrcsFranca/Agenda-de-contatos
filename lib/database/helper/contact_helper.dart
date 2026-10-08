@@ -24,7 +24,7 @@ class ContactHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (Database db, int newVersion) async {
         await db.execute(
           "CREATE TABLE $contactTable("
@@ -32,8 +32,30 @@ class ContactHelper {
           "$nameColumn TEXT,"
           "$emailColumn TEXT,"
           "$phoneColumn TEXT,"
-          "$imgColumn TEXT)",
+          "$imgColumn TEXT,"
+          "$cepColumn TEXT,"
+          "$logradouroColumn TEXT,"
+          "$numeroColumn TEXT,"
+          "$complementoColumn TEXT,"
+          "$bairroColumn TEXT,"
+          "$cidadeColumn TEXT,"
+          "$ufColumn TEXT)",
         );
+      },
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {
+        if (oldVersion < 2) {
+          for (final col in [
+            cepColumn,
+            logradouroColumn,
+            numeroColumn,
+            complementoColumn,
+            bairroColumn,
+            cidadeColumn,
+            ufColumn,
+          ]) {
+            await db.execute("ALTER TABLE $contactTable ADD COLUMN $col TEXT");
+          }
+        }
       },
     );
   }
@@ -48,7 +70,19 @@ class ContactHelper {
     Database dbContact = await db;
     List<Map<String, dynamic>> maps = await dbContact.query(
       contactTable,
-      columns: [idColumn, nameColumn, emailColumn, phoneColumn, imgColumn],
+      columns: [
+        idColumn,
+        nameColumn,
+        emailColumn,
+        phoneColumn,
+        imgColumn,
+        cepColumn,
+        logradouroColumn,
+        numeroColumn,
+        bairroColumn,
+        cidadeColumn,
+        ufColumn,
+      ],
       where: "$idColumn = ?",
       whereArgs: [id],
     );
